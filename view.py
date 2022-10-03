@@ -2,6 +2,10 @@ from model import datenverarbeitung
 import tkinter as tk
 import datetime
 from datetime import date
+import os.path
+
+
+
 
 window = tk.Tk()
 window.title("Arbeitszeiten in Excel exportieren")
@@ -9,13 +13,14 @@ window.geometry("770x320+300+300")
 window.resizable(False,False)
 
 
+
 window.columnconfigure([0,1,2,3,4,5,6],weight=1,minsize=50)
 window.rowconfigure([3,4,5,6,7],pad=7)
 
 label_00 = tk.Label(text="Vor/Nachname")
-label_00.grid(column=0,row=0,sticky="w")
+
 label_01 = tk.Label(text="PersonalNr.")
-label_01.grid(column=0,row=1,sticky="w")
+
 label_02 = tk.Label(text="KW Nr.")
 label_02.grid(column=0,row=2,sticky="w")
 label_010 = tk.Label(text="Made by Philipp Baars")
@@ -47,10 +52,20 @@ label_62.grid(column=6,row=2)
 entry_10 = tk.Entry()   #name
 entry_11 = tk.Entry()   #pers. nr.
 entry_12 = tk.Entry(width=5)    #KW Nr.
-entry_10.grid(column=1,row=0,sticky="w")
-entry_11.grid(column=1,row=1,sticky="w")
+#entry_10.grid(column=1,row=0,sticky="w") #für mich angepasste version braucht diese Inputs nicht.
+#entry_11.grid(column=1,row=1,sticky="w")
 entry_12.grid(column=1,row=2,sticky="w")
 eingaben = []
+FileExists = bool()
+
+if os.path.isfile('Vorname Nachname - Personalnummer.txt') == False: ### Wenn noch keine Daten erhoben wurden, werden diese Entry Felder angezeigt.
+    entry_10.grid(column=1,row=0,sticky="w")
+    entry_11.grid(column=1,row=1,sticky="w")
+    label_00.grid(column=0,row=0,sticky="w")
+    label_01.grid(column=0,row=1,sticky="w")
+    FileExists = False
+else:
+    FileExists = True
 
 
 
@@ -73,8 +88,21 @@ for i in range(3,8): # Mon - Fr
         eingaben.append(eingabe)       
 
 def ausgabe():
-    name = entry_10.get()
-    persNr = entry_11.get()
+    if FileExists == False:
+        name = entry_10.get()
+        persNr = entry_11.get()
+        if name == '' or persNr == '':
+            window.destroy() #### Programm beendet ####
+        else:
+            with open('Vorname Nachname - Personalnummer.txt', 'w') as f:
+                f.writelines([name,'\n',persNr])
+
+    else:
+        with open('Vorname Nachname - Personalnummer.txt') as file:
+            lines = file.readlines()
+            lines = [line.rstrip() for line in lines]
+            name = lines[0]
+            persNr = lines[1]
     KwNr = entry_12.get()
     #Datum
     year = date.today().year
