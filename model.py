@@ -5,9 +5,9 @@ def datenverarbeitung(liste,name,persNr,datum):
     for x in range(0,20,4):
     
         A_Beginn = liste[x].get()
-        A_Ende = liste[x+1].get()
-        P_Beginn = liste[x+2].get()
-        P_Ende = liste[x+3].get()
+        A_Ende = liste[x+3].get()
+        P_Beginn = liste[x+1].get()
+        P_Ende = liste[x+2].get()
         subList = [A_Beginn,P_Beginn,P_Ende,A_Ende] #Jedes Zeitobjekt beinhaltet die Zeiten des Tages
         print("Tag:",subList)
         listeMitSubListen.append(subList)
@@ -31,8 +31,7 @@ def datenverarbeitung(liste,name,persNr,datum):
     typ = ""
     bemerkung = ""
     for i2,Tag in enumerate(listeMitSubListen):
-        if Tag[0] != "" and Tag[3] != "":        ## checkt, ob an dem Tag gearbeitet wurde (gibt es einen Arbeitsbeginn..)
-
+        if Tag[0] != "":        ## checkt, ob an dem Tag gearbeitet wurde (gibt es einen Arbeitsbeginn..)
             for i,time in enumerate(Tag):
                 row +=1
                 if i == 0:
@@ -55,12 +54,11 @@ def datenverarbeitung(liste,name,persNr,datum):
                 datum3 = datum2.strftime("%d.%m.%Y")
                 print(datum3)
                 ########### DATEN ###########
-                test = [persNr,name,datum3,time,typ,bemerkung] 
+                #test = [persNr,name,datum3,time,typ,bemerkung] 
+                test = [persNr,name,datum3,time,typ,bemerkung] # vorausgefüllt nur für mich
                 ########### DATEN ###########
                 worksheet.write_row(row,0,test,cell_format)
               
                 
     workbook.close()
     return True
-
-    
